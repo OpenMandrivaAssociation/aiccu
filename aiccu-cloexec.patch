@@ -1,0 +1,59 @@
+diff -urNp --exclude-from=/home/mdomsch/excludes --minimal aiccu.orig/common/common.c aiccu/common/common.c
+--- aiccu.orig/common/common.c	2008-10-17 18:43:13.000000000 -0500
++++ aiccu/common/common.c	2008-10-17 22:11:52.000000000 -0500
+@@ -365,6 +365,7 @@ TLSSOCKET connect_client(const char *hos
+ 	{
+ 		sock->socket = socket(res->ai_family, res->ai_socktype, res->ai_protocol);
+ 		if (sock->socket == -1) continue;
++		fcntl(sock->socket, F_SETFD, FD_CLOEXEC);
+ 		if (connect(sock->socket, res->ai_addr, (unsigned int)res->ai_addrlen) == 0) break;
+ 		closesocket(sock->socket);
+ 		sock->socket = -1;
+@@ -428,6 +429,7 @@ TLSSOCKET listen_server(const char *desc
+ 		sock->socket = socket(res->ai_family, res->ai_socktype, res->ai_protocol);
+ 		if (!(sock->socket < 0))
+ 		{
++			fcntl(sock->socket, F_SETFD, FD_CLOEXEC);
+ 			setsockopt(sock->socket, SOL_SOCKET, SO_REUSEADDR, (const char *)&on, sizeof(on));
+ 			if (bind(sock->socket, res->ai_addr, (unsigned int)res->ai_addrlen) == 0) break;
+ 			closesocket(sock->socket);
+diff -urNp --exclude-from=/home/mdomsch/excludes --minimal aiccu.orig/common/heartbeat.c aiccu/common/heartbeat.c
+--- aiccu.orig/common/heartbeat.c	2008-10-17 18:43:13.000000000 -0500
++++ aiccu/common/heartbeat.c	2008-10-17 22:12:51.000000000 -0500
+@@ -58,6 +58,7 @@ SOCKET heartbeat_socket(
+ 		dolog(LOG_ERR, "Couldn't open a socket for determining current IPv4 address\n");
+ 		return -1;
+ 	}
++	fcntl(sockfd, F_SETFD, FD_CLOEXEC);
+ 
+ #if defined(SOL_SOCKET) && defined(SO_BINDTODEVICE)
+ 	/*
+diff -urNp --exclude-from=/home/mdomsch/excludes --minimal aiccu.orig/common/tun.c aiccu/common/tun.c
+--- aiccu.orig/common/tun.c	2008-10-17 18:43:13.000000000 -0500
++++ aiccu/common/tun.c	2008-10-17 22:12:42.000000000 -0500
+@@ -696,6 +696,8 @@ bool tun_start(struct tun_reader *tun)
+ 
+ 	/* Create a new tap device */
+ 	tun_fd = open("/dev/net/tun", O_RDWR);
++	if (tun_fd >= 0)
++		fcntl(tun_fd, F_SETFD, FD_CLOEXEC);
+ 	if (tun_fd == -1)
+ 	{
+ 		tun_log(LOG_ERR, "start", "Couldn't open device %s: %s (%d)\n", "/dev/net/tun", strerror(errno), errno);
+@@ -725,6 +727,8 @@ bool tun_start(struct tun_reader *tun)
+ 	tun_log(LOG_DEBUG, "start", "Trying Configured TUN/TAP interface %s...\n", g_aiccu->ipv6_interface);
+ 	snprintf(buf, sizeof(buf), "/dev/%s", g_aiccu->ipv6_interface);
+ 	tun_fd = open(buf, O_RDWR);
++	if (tun_fd >= 0)
++		fcntl(tun_fd, F_SETFD, FD_CLOEXEC);
+ 	if (tun_fd < 0)
+ 	{
+ 		/* Fall back to trying all /dev/tun* devices */
+@@ -735,6 +739,7 @@ bool tun_start(struct tun_reader *tun)
+ 			tun_fd = open(buf, O_RDWR);
+ 			if (tun_fd >= 0)
+ 			{
++				fcntl(tun_fd, F_SETFD, FD_CLOEXEC);
+ 				/* Copy over the name of the interface so that configging goes okay */
+ 				if (g_aiccu->ipv6_interface) free(g_aiccu->ipv6_interface);
+ 				snprintf(buf, sizeof(buf), "tun%u", i);

@@ -1,0 +1,11 @@
+--- aiccu/common/common.c.orig	2011-10-27 18:32:11.933323958 -0700
++++ aiccu/common/common.c	2011-10-27 18:32:21.247179132 -0700
+@@ -37,7 +37,7 @@
+ 	if (g_aiccu && !g_aiccu->verbose && level == LOG_DEBUG) return;
+ 
+ #ifndef _WIN32
+-	if (g_aiccu && g_aiccu->daemonize > 0) vsyslog(LOG_LOCAL7|level, fmt, ap);
++	if (g_aiccu && g_aiccu->daemonize > 0) vsyslog(LOG_DAEMON|level, fmt, ap);
+ 	else
+ 	{
+ 		vfprintf(stderr, fmt, ap);

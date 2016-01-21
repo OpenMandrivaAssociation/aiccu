@@ -1,0 +1,24 @@
+diff -up aiccu/common/aiccu.h.run aiccu/common/aiccu.h
+--- aiccu/common/aiccu.h.run	2007-01-15 13:01:43.000000000 +0100
++++ aiccu/common/aiccu.h	2011-07-18 18:00:22.313521552 +0200
+@@ -68,7 +68,7 @@
+ #define AICCU_CACHE	"/var/cache/aiccu.cache"
+ 
+ /* The PID we are running as when daemonized */
+-#define AICCU_PID	"/var/run/aiccu.pid"
++#define AICCU_PID	"/run/aiccu.pid"
+ 
+ /* AICCU Configuration file */
+ #ifdef _WIN32
+diff -up aiccu/doc/aiccu.conf.run aiccu/doc/aiccu.conf
+--- aiccu/doc/aiccu.conf.run	2011-07-18 18:02:32.898521537 +0200
++++ aiccu/doc/aiccu.conf	2011-07-18 18:03:12.086521529 +0200
+@@ -47,7 +47,7 @@ automatic true
+ requiretls false
+ 
+ # PID File
+-#pidfile /var/run/aiccu.pid
++pidfile /run/aiccu.pid
+ 
+ # Add a default route (default: true)
+ #defaultroute true
