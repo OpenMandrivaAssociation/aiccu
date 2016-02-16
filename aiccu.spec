@@ -6,25 +6,22 @@
 # AICCU RPM Spec File
 ############################################################
 
-Summary:   SixXS Automatic IPv6 Connectivity Client Utility
-Name:      aiccu
-Version:   2007.01.15
-Release:   1
-License:   BSD
-Group:     System/Servers
-URL:       http://www.sixxs.net/tools/aiccu/
-Source0:    http://www.sixxs.net/archive/sixxs/aiccu/unix/aiccu_20070115.tar.gz
-Source1:   aiccu.service
-Patch0: aiccu-cloexec.patch
-Patch1: aiccu-run.patch
-Patch2: aiccu-syslog-daemon.patch
-Patch3: aiccu-gnutls34.patch
-BuildRequires: gnutls-devel
-BuildRequires: systemd-units
-Requires:  iproute2
-Requires(post): systemd-units
-Requires(preun): systemd-units
-Requires(postun): systemd-units
+Summary:	SixXS Automatic IPv6 Connectivity Client Utility
+Name:		aiccu
+Version:	2007.01.15
+Release:	1
+License:	BSD
+Group:		System/Servers
+URL:		http://www.sixxs.net/tools/aiccu/
+Source0:	http://www.sixxs.net/archive/sixxs/aiccu/unix/aiccu_20070115.tar.gz
+Source1:	aiccu.service
+Patch0:		aiccu-cloexec.patch
+Patch1:		aiccu-run.patch
+Patch2:		aiccu-syslog-daemon.patch
+Patch3:		aiccu-gnutls34.patch
+BuildRequires:	gnutls-devel
+BuildRequires:	systemd-units
+Requires:	iproute2
 
 %description
 This client automatically gives one IPv6 connectivity
@@ -45,26 +42,17 @@ For more information about SixXS check http://www.sixxs.net
 find . -type f -not -name rules -and -not -name *init* -exec chmod a-x \{\} \;
 
 %build
-%make RPM_OPT_FLAGS="$RPM_OPT_FLAGS -Wno-error"
+%setup_compile_flags
+%make RPM_OPT_FLAGS="%{optflags} -Wno-error"
 
 %install
-mkdir -p $RPM_BUILD_ROOT
-make install DESTDIR=$RPM_BUILD_ROOT
+%makeinstall_std
 
 # remove old-style init script
-rm $RPM_BUILD_ROOT%{_sysconfdir}/init.d/*
+rm %{buildroot}%{_sysconfdir}/init.d/*
 
-mkdir -p $RPM_BUILD_ROOT%{_unitdir}
-install -p %{SOURCE1} $RPM_BUILD_ROOT%{_unitdir}/
-
-%post
-%systemd_post aiccu.service
-
-%preun
-%systemd_preun aiccu.service
-
-%postun
-%systemd_postun_with_restart aiccu.service 
+mkdir -p %{buildroot}%{_unitdir}
+install -p %{SOURCE1} %{buildroot}%{_unitdir}/
 
 %files
 %doc doc/README doc/LICENSE
