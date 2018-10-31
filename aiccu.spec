@@ -9,7 +9,7 @@
 Summary:	SixXS Automatic IPv6 Connectivity Client Utility
 Name:		aiccu
 Version:	2007.01.15
-Release:	1
+Release:	2
 License:	BSD
 Group:		System/Servers
 URL:		http://www.sixxs.net/tools/aiccu/
