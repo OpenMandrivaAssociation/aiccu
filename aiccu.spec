@@ -12,7 +12,7 @@ Version:	20070115
 Release:	3
 License:	BSD
 Group:		System/Servers
-URL:		http://www.sixxs.net/tools/aiccu/
+URL:		https://www.sixxs.net/tools/aiccu/
 Source0:	http://www.sixxs.net/archive/sixxs/aiccu/unix/aiccu_20070115.tar.gz
 Source1:	aiccu.service
 Patch0:		aiccu-cloexec.patch
