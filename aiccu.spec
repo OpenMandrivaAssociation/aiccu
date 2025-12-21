@@ -19,6 +19,7 @@ Patch0:		aiccu-cloexec.patch
 Patch1:		aiccu-run.patch
 Patch2:		aiccu-syslog-daemon.patch
 Patch3:		aiccu-gnutls34.patch
+BuildRequires:	make
 BuildRequires:	gnutls-devel
 BuildRequires:	systemd-units
 Requires:	iproute2
